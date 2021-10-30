@@ -1,5 +1,6 @@
 # WNNSA
 
+# Structure of the folder
 - **Datasets**: This folder contains the datasets for three different scenarios for control group selection. In each scenario 100 datasets are available.
 
   - *Scenario I*: ÁTRNI -> Each dataset contains 1.000 indivuduals. Individuals are characterized by 10 binary variables (), each from a Bernoulli distribution ().
