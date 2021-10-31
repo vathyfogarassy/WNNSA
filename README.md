@@ -3,8 +3,8 @@
 # Structure of the folder
 - **Datasets**: This folder contains the datasets for two different scenarios for control group selection. In each scenario 100 datasets are available.
 
-  - *Scenario I*: ÁTRNI -> In the first scenario, each individual is characterized by 10 binary variables. The binary variables may represent, for example, the gender of the subject or various diagnoses. In this scenario, 1000 individuals are simulated in each dataset and the ratio of the candidate subjects to the treated individuals (case group) in the 100 datasets is around 25%.
-  - *Scenario II*: ÁTRNI -> The second scenario simulates a more difficult control group selection problem where each individual is characterzied by 8 variables: 2 ordinal, 5 binary and 2 continuous. The weights are a mix of neagtive and positive effects. Each dataset containes 600 individuals. The number of treated individuals (case group) is around 19%.
+  - *Scenario I*: In the first scenario, each individual is characterized by 10 binary variables. The binary variables may represent, for example, the gender of the subject or various diagnoses. In this scenario, 1000 individuals are simulated in each dataset and the ratio of the candidate subjects to the treated individuals (case group) in the 100 datasets is around 25%.
+  - *Scenario II*: The second scenario simulates a more difficult control group selection problem where each individual is characterzied by 8 variables: 2 ordinal, 5 binary and 2 continuous. The weights are a mix of neagtive and positive effects. Each dataset containes 600 individuals. The number of treated individuals (case group) is around 19%.
 
   *Attributes*:
 
