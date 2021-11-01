@@ -14,7 +14,7 @@
   - ps: propensity score value of the individual
   More details of the scenarios are given in the abovementioned article.
 
-- **Results**: This folder contains the result files of different matching algorithms for Scenario I, II and III. Each output contains the following attributes:
+- **Results**: This folder contains the result files of different matching algorithms for Scenario I and II. Each output contains the following attributes:
 
   - _id: index of the individual
   - x1, ..., xn: attributes (covariates) of the individuals
