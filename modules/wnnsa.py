@@ -6,8 +6,6 @@ import pandas as pd
 
 import wnnem
 
-# %%
-
 def normalize(sample, population, attributes, w, limits=None):
     if limits is None:
         limits = np.concatenate((sample[attributes], population[attributes]))
@@ -22,47 +20,32 @@ def normalize(sample, population, attributes, w, limits=None):
     
     return sample_norm.as_matrix(), population_norm.as_matrix()
 
-
-# %%
-
-def calc_error_NNCSSA(row, result_indices, distance_matrix):
+def calc_error(row, result_indices, distance_matrix):
     current = distance_matrix[row,:].argsort()[:result_indices[row]+2][-2]
     alter = distance_matrix[row,:].argsort()[:result_indices[row]+2][-1]
     return (distance_matrix[row, alter] - distance_matrix[row, current])# / distance_matrix[row, current]
 
-
-# %%
-
-def error_func_NNCSSA(rows, result_indices, distance_matrix):
+def error_func(rows, result_indices, distance_matrix):
    "Calculates the error and returns the optimal index"      
    #error = [lambda row: calc_error(row, result_indices, distance_matrix), rows]
    #vmax = np.max(error)
    #indices = [i for i, x in enumerate(error) if x == vmax]
    #return np.random.choice(indices)
-   return np.argmax([calc_error_NNCSSA(row, result_indices, distance_matrix) for row in rows])
+   return np.argmax([calc_error(row, result_indices, distance_matrix) for row in rows])
 
-
-# %%
-
-def  update_result_NNCSSA(row, vector, indices, distance_matrix):  
+def  update_result(row, vector, indices, distance_matrix):  
     offset = 0
     if row.size == 1:
         offset = 1
     vector[row] = distance_matrix[row,:].argsort()[:indices[row]+2][-2+offset]
     return
 
-
-# %%
-
-def update_result_vector_NNCSSA( rows, vector, indices, distance_matrix):
+def update_result_vector( rows, vector, indices, distance_matrix):
     if isinstance(rows, (int, np.integer)):
-        update_result_NNCSSA(rows, vector, indices, distance_matrix)
+        update_result(rows, vector, indices, distance_matrix)
     else:    
         for row in rows:
-            update_result_NNCSSA(row, vector, indices, distance_matrix)
-
-
-# %%
+            update_result(row, vector, indices, distance_matrix)
 
 def _unique_dist( a, b ):   
     w = len(a)
@@ -70,9 +53,6 @@ def _unique_dist( a, b ):
     d = np.sum(abs_diff) / w
     
     return d
-
-
-# %%
 
 def energy( result, e_sam, e_pop, P):   
     res = P.iloc[result]
@@ -82,10 +62,7 @@ def energy( result, e_sam, e_pop, P):
     return np.sum(en) + (e_sam.shape[0] - len(result))
     #return np.sum(distance_matrix[:,result])
 
-
-# %%
-
-def NNCSSA(distance_matrix, k, sT, e_sam, e_pop, P, max_it):   
+def WNNSA(distance_matrix, k, sT, e_sam, e_pop, P, max_it):   
     
     with open('simann_LOG_ELES.txt', 'w') as f:
     
@@ -161,12 +138,12 @@ def NNCSSA(distance_matrix, k, sT, e_sam, e_pop, P, max_it):
                 for val in vals_repeated:
                     conflicting_indices =np.where(tmp_vector == val)
                     conflicting_indices = [item for sublist in conflicting_indices for item in sublist]
-                    conflicting_indices.pop(error_func_NNCSSA(conflicting_indices, tmp_indices, distance_matrix))
+                    conflicting_indices.pop(error_func(conflicting_indices, tmp_indices, distance_matrix))
                     if len(conflicting_indices) == 1:
                         conflicting_indices = conflicting_indices[0]
                     tmp_indices[conflicting_indices] = tmp_indices[conflicting_indices] + 1
                     tmp_indices = tmp_indices % n
-                    update_result_vector_NNCSSA(conflicting_indices, tmp_vector, tmp_indices, distance_matrix)
+                    update_result_vector(conflicting_indices, tmp_vector, tmp_indices, distance_matrix)
                     
                 res_count = np.unique(tmp_vector).shape[0]
                 
@@ -175,23 +152,9 @@ def NNCSSA(distance_matrix, k, sT, e_sam, e_pop, P, max_it):
             te = energy(tmp_vector, e_sam, e_pop, P)
             if te < be:
                 result_vector = tmp_vector
-                be = te
-                
-                #print('CSERE')
-                #print(np.unique(result_vector).shape[0])
-        #except ValueError:
-            
-           # print('DOOOOONEEEEE')
-           # print('DEAD', file=f)
-           # print('T: {}'.format(T), file=f)
-            #break
-           
-        
+                be = te     
              
     return result_vector, iteration - 1
-
-
-# %%
 
 def uni_arr(arr):
     
@@ -201,9 +164,6 @@ def uni_arr(arr):
                 arr[j] = np.nan
     
     return arr
-
-
-# %%
 
 def match(_to, _from, ovar, w, **kwargs):
     """
@@ -249,7 +209,7 @@ def match(_to, _from, ovar, w, **kwargs):
     sT = 200
     max_it = 500
     
-    res, it = NNCSSA(d, k, sT, norm_to, norm_from, _from, max_it)
+    res, it = WNNSA(d, k, sT, norm_to, norm_from, _from, max_it)
       
     res = uni_arr(res.astype('float64'))
     
@@ -258,7 +218,7 @@ def match(_to, _from, ovar, w, **kwargs):
     _to['tmp'] = res
     
     res = res[~np.isnan(res)]
-    control = otpt.loc[res]#.set_index('orig_idx')
+    control = otpt.loc[res]
       
     for index, row in _to.iterrows():
         try:
@@ -270,15 +230,10 @@ def match(_to, _from, ovar, w, **kwargs):
     
     return control[[_id] + ovar + ['treated', 'ps']].dropna().set_index(_id)
 
-
-
-# %%
-    
 def est_k(dist):
     k=1
     utkozes = 1
     while utkozes > 0:
-        # távolságmátrix konverziója rangmátrixá
         dist_rank = np.zeros(dist.shape)
         index=np.arange(0, len(dist), 1, dtype=int)
         for idx in index:
@@ -287,9 +242,8 @@ def est_k(dist):
             ranks[temp] = np.arange(len(dist[idx]))
             dist_rank[idx] = np.transpose(ranks)
         
-        dist_rank = dist_rank + 1  # ez kell bele, különben a 0-kal baj kenne!
-        messziek=np.argwhere(dist_rank > k)  # ezekkel nem kell foglalkoznunk
-        #kozeliek = np.argwhere(dist_rank <= k)  # ezek a k-nn szomszédjai
+        dist_rank = dist_rank + 1
+        messziek=np.argwhere(dist_rank > k)
         dist_rank_kozeli=dist_rank
         dist_rank_kozeli[messziek[:, 0], messziek[:, 1]] = 0
         dist_rank_bool=dist_rank_kozeli
