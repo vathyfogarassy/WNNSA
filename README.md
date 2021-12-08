@@ -1,5 +1,11 @@
 # WNNSA
 
+The WNNSA method is published in the following article:
+
+Szekér S, Vathy-Fogarassy Á. Optimized Weighted Nearest Neighbours Matching Algorithm for Control Group Selection. Algorithms. 2021; 14(12):356. https://doi.org/10.3390/a14120356
+
+In case of using the datasets or applying the WNNSA method, please cite the article above.
+
 # Structure of the folder
 - **Datasets**: This folder contains the datasets for two different scenarios for control group selection. In each scenario 100 datasets are available.
 
