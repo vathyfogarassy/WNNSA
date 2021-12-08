@@ -22,6 +22,7 @@
   - ps: propensity score value of the individual
   - ss_pair: index (_id) of the matched pair resulted by the stratified matching method
   - wnnem_pair: index (_id) of the matched pair resulted by the WNNEM method
+  - wnnsa_pair: index (_id) of the matched pair resulted by the WNNSA method
   - nn_euk_pair_numberoftrial: index (_id) of the matched pair resulted by the nearest neighbour matching based on the Euclidean distances of the individuals
   - nn_mah_pair_numberoftrial: index (_id) of the matched pair resulted by the Mahalanobis matching (nearest neighbour matching based on Mahalanobis distances)
   - psm_02_pair_numberoftrial: index (_id) of the matched pair resulted by the greedy 1:1 PSM method applying caliper size set as 0.2 of the standard deviation of the logit of the propensity scores.
