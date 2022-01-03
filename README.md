@@ -4,8 +4,6 @@ The WNNSA method is published in the following article:
 
 Szekér S, Vathy-Fogarassy Á. Optimized Weighted Nearest Neighbours Matching Algorithm for Control Group Selection. Algorithms. 2021; 14(12):356. https://doi.org/10.3390/a14120356
 
-While the doi is not activated, the article can be found here: https://www.mdpi.com/1999-4893/14/12/356
-
 In case of using the datasets or applying the WNNSA method, please cite the article above.
 
 # Structure of the folder
